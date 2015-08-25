@@ -34,25 +34,36 @@
         if (eventName) {
           MP.api.segment(eventName, propName, dateRange).done(function(results) {
             
-            var result = results.values();
-            debugger;
-            
-            if (propName){
-              MP.api.segment(eventName, null, dateRange).done(function(results2){
-                var size = Object.keys(results.length);
-                
-              })
+            if (propName === null){
+              eventGraph.MPChart('setData', results);
+              eventTable.MPTable('setData', results);
             }
-           
-            console.log(propName);
-            var result = results;
-            console.log(result.values());
-            console.log(result.divide(10));
-            var size = Object.keys(result.json).length
-            console.log(size);
-            eventGraph.MPChart('setData', results);
-            eventTable.MPTable('setData', results);
-            
+            else {
+              var nullPropName;
+              MP.api.segment(eventName, nullPropName, dateRange).done(function(results2){
+                var size = Object.keys(results.json).length;
+                var size2 = Object.keys(results2).length;
+                console.log(results);
+                console.log("size: " + size);
+                console.log(results2);
+                console.log("size2: " + size2);
+                var total = results2.json[eventName];
+                console.log(total)
+                
+                for (var dates in total){
+                  if (total.hasOwnProperty(dates)){
+                    total[dates] = total[dates] / size;
+                    console.log (total[dates]);
+                  }
+                }
+                
+                
+                results.json.avg = total;
+                console.log(results);
+                eventGraph.MPChart('setData', results);
+                eventTable.MPTable('setData', results);
+                })
+            }
           });
         }
       };
