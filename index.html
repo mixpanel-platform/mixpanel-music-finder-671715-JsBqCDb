@@ -39,17 +39,12 @@
               eventTable.MPTable('setData', results);
             }
             else {
-              var nullPropName;
-              MP.api.segment(eventName, nullPropName, dateRange).done(function(results2){
+//            API call for non-segmented values needed to calculate average
+              MP.api.segment(eventName, null, dateRange).done(function(results2){
                 var size = Object.keys(results.json).length;
-                var size2 = Object.keys(results2).length;
-                console.log(results);
-                console.log("size: " + size);
-                console.log(results2);
-                console.log("size2: " + size2);
                 var total = results2.json[eventName];
-                console.log(total)
-                
+
+//              take total non-segmented count and divide by number of properties
                 for (var dates in total){
                   if (total.hasOwnProperty(dates)){
                     total[dates] = total[dates] / size;
@@ -58,7 +53,7 @@
                 }
                 
                 results.json.Average = total;
-                console.log(results);
+//                console.log(results);
                 eventGraph.MPChart('setData', results);
                 eventTable.MPTable('setData', results);
                 })
