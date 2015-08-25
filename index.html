@@ -20,7 +20,7 @@
       var eventSelect = $('#eventSelect').MPEventSelect();
       var propSelect  = $('#propSelect').MPPropertySelect();
       var dateSelect  = $('#dateSelect').MPDatepicker();
-      var eventGraph  = $('#graph').MPChart({chartType: 'bar'});
+      var eventGraph  = $('#graph').MPChart({chartType: 'line'});
       var eventTable  = $('#table').MPTable({
         showPercentages: true,
         firstColHeader: 'Event'
@@ -33,8 +33,26 @@
 
         if (eventName) {
           MP.api.segment(eventName, propName, dateRange).done(function(results) {
+            
+            var result = results.values();
+            debugger;
+            
+            if (propName){
+              MP.api.segment(eventName, null, dateRange).done(function(results2){
+                var size = Object.keys(results.length);
+                
+              })
+            }
+           
+            console.log(propName);
+            var result = results;
+            console.log(result.values());
+            console.log(result.divide(10));
+            var size = Object.keys(result.json).length
+            console.log(size);
             eventGraph.MPChart('setData', results);
             eventTable.MPTable('setData', results);
+            
           });
         }
       };
